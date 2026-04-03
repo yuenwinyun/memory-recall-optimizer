@@ -1,0 +1,52 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Optional git tag to publish (e.g. v0.1.1). If empty, uses current HEAD."
+        required: false
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish package
+    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Validate token
+        run: |
+          test -n "$NODE_AUTH_TOKEN" || {
+            echo "NPM_TOKEN secret is required. Add it in Settings > Secrets and Variables > Actions."
+            exit 1
+          }
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Publish package
+        run: npm publish --access public

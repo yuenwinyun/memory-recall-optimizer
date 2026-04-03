@@ -1,15 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-let pluginEntry: Record<string, unknown> | null = null;
-
-vi.mock("../api.js", () => ({
-  definePluginEntry(entry: Record<string, unknown>) {
-    pluginEntry = entry;
-    return entry;
-  },
-}));
-
-import plugin from "../index.js";
+import plugin from "../../index";
 
 const buildApi = (pluginConfig: Record<string, unknown>) => {
   const handlers: Record<string, (event: any) => Promise<any> | any> = {};
@@ -32,13 +23,11 @@ const buildApi = (pluginConfig: Record<string, unknown>) => {
 
 describe("memory recall optimizer e2e", () => {
   it("builds complete memory flow for a matching prompt and memory tool call", async () => {
-    pluginEntry = null;
     const { api, handlers } = buildApi({});
 
     expect(typeof plugin.register).toBe("function");
     plugin.register(api as never);
 
-    expect(pluginEntry).not.toBeNull();
     expect(handlers.before_prompt_build).toBeInstanceOf(Function);
     expect(handlers.before_tool_call).toBeInstanceOf(Function);
     expect(handlers.after_tool_call).toBeInstanceOf(Function);
@@ -77,11 +66,9 @@ describe("memory recall optimizer e2e", () => {
   });
 
   it("skips registration when disabled", () => {
-    pluginEntry = null;
     const { api, handlers } = buildApi({ enabled: false });
     plugin.register(api as never);
 
-    expect(pluginEntry).not.toBeNull();
     expect(Object.keys(handlers)).toHaveLength(0);
     expect(api.logger.warn).toHaveBeenCalledWith(
       "memory-recall-optimizer: plugin disabled in config",

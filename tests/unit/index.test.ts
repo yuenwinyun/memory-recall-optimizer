@@ -8,7 +8,7 @@ import {
   readConfig,
   shouldApplyMemoryGuard,
   toNumber,
-} from "../index.js";
+} from "../../index";
 
 describe("memory recall config", () => {
   it("parses booleans from numbers and strings", () => {

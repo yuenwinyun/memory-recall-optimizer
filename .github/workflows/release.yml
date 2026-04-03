@@ -23,12 +23,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+
+      - name: Checkout tagged ref for manual release
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''
+        run: |
+          git fetch --tags --force
+          git checkout "${{ github.event.inputs.release_tag }}"
 
       - name: Install dependencies
         run: |
@@ -45,8 +53,21 @@ jobs:
             exit 1
           }
 
+      - name: Configure npm auth
+        run: npm config set //registry.npmjs.org/:_authToken "${NODE_AUTH_TOKEN}"
+
+      - name: Verify npm auth
+        run: |
+          npm whoami --registry https://registry.npmjs.org || {
+            echo "NPM_TOKEN is missing, invalid, or lacks publish permission."
+            exit 1
+          }
+
       - name: Run tests
         run: npm run test
+
+      - name: Dry publish check
+        run: npm publish --access public --dry-run
 
       - name: Publish package
         run: npm publish --access public

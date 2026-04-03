@@ -13,7 +13,7 @@ A lightweight OpenClaw hook plugin that improves memory recall consistency by sh
 ### From npm (public)
 
 ```bash
-openclaw plugins install @openclaw/memory-recall-optimizer
+openclaw plugins install @yuenwinyun/memory-recall-optimizer
 openclaw plugins enable memory-recall-optimizer
 ```
 

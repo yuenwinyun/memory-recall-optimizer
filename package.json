@@ -1,5 +1,5 @@
 {
-  "name": "@openclaw/memory-recall-optimizer",
+  "name": "@yuenwinyun/memory-recall-optimizer",
   "version": "0.1.0",
   "description": "OpenClaw hook plugin to improve memory recall reliability and observability.",
   "type": "module",
@@ -42,7 +42,7 @@
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/memory-recall-optimizer",
+      "npmSpec": "@yuenwinyun/memory-recall-optimizer",
       "defaultChoice": "npm"
     },
     "release": {

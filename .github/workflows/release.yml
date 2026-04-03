@@ -31,6 +31,8 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Checkout tagged ref for manual release
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != ''
@@ -40,10 +42,13 @@ jobs:
 
       - name: Install dependencies
         run: |
+          corepack enable
           if [ -f package-lock.json ]; then
             npm ci
+          elif [ -f pnpm-lock.yaml ]; then
+            corepack pnpm install --frozen-lockfile
           else
-            npm install --no-audit --no-fund
+            corepack pnpm install --no-frozen-lockfile
           fi
 
       - name: Validate token

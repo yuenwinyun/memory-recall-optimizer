@@ -1,0 +1,38 @@
+{
+    "name":  "@openclaw/memory-recall-optimizer",
+    "version":  "0.1.0",
+    "description":  "OpenClaw hook plugin to improve memory recall reliability and observability.",
+    "type":  "module",
+    "private":  false,
+    "files":  [
+                  "api.ts",
+                  "index.ts",
+                  "openclaw.plugin.json",
+                  "README.md",
+                  "LICENSE"
+              ],
+    "scripts":  {
+                    "test":  "echo \"No tests yet\""
+                },
+    "devDependencies":  {
+                            "openclaw":  "^2026.4.1"
+                        },
+    "peerDependencies":  {
+                             "openclaw":  "\u003e=2026.4.1"
+                         },
+    "openclaw":  {
+                     "extensions":  [
+                                        "./index.ts"
+                                    ],
+                     "install":  {
+                                     "npmSpec":  "@openclaw/memory-recall-optimizer",
+                                     "defaultChoice":  "npm"
+                                 },
+                     "release":  {
+                                     "publishToNpm":  true
+                                 },
+                     "compat":  {
+                                    "pluginApi":  "\u003e=2026.4.1"
+                                }
+                 }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "memory-recall-optimizer",
+  "name": "Memory Recall Optimizer",
+  "description": "Hook-only plugin that reinforces memory_search behavior and improves recall observability.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "enforceMemorySearchTuning": {
+        "type": "boolean",
+        "default": true
+      },
+      "prePromptGuard": {
+        "type": "boolean",
+        "default": true
+      },
+      "maxResults": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 25,
+        "default": 10
+      },
+      "minScore": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.2
+      },
+      "minPromptLengthForGuard": {
+        "type": "number",
+        "minimum": 8,
+        "maximum": 120,
+        "default": 18
+      },
+      "logMemorySearchSummary": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  },
+  "uiHints": {
+    "enabled": {
+      "label": "Enable memory recall optimizer",
+      "help": "Enable all plugin hooks for memory recall optimization."
+    },
+    "enforceMemorySearchTuning": {
+      "label": "Enforce memory_search tuning",
+      "help": "Enforce minimum maxResults and minScore when memory_search is called."
+    },
+    "prePromptGuard": {
+      "label": "Inject memory recall prompt hint",
+      "help": "Inject a short recall hint for memory-oriented turns."
+    },
+    "maxResults": {
+      "label": "Default maxResults",
+      "help": "Minimum maxResults enforced for memory_search calls."
+    },
+    "minScore": {
+      "label": "Default minScore",
+      "help": "Minimum memory_search similarity threshold enforced when tuning."
+    },
+    "logMemorySearchSummary": {
+      "label": "Log memory_search summary",
+      "help": "Log memory_search hit count and disabled state after each call."
+    }
+  }
+}

@@ -26,6 +26,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      # setup-node's pnpm cache requires pnpm on PATH before this step runs.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -42,13 +48,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          corepack enable
           if [ -f package-lock.json ]; then
             npm ci
           elif [ -f pnpm-lock.yaml ]; then
-            corepack pnpm install --frozen-lockfile
+            pnpm install --frozen-lockfile
           else
-            corepack pnpm install --no-frozen-lockfile
+            pnpm install --no-frozen-lockfile
           fi
 
       - name: Validate token

@@ -14,11 +14,14 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "echo \"No tests yet\"",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "vitest run tests/e2e",
     "prepublishOnly": "npm run test"
   },
   "devDependencies": {
-    "openclaw": "^2026.4.1"
+    "openclaw": "^2026.4.1",
+    "vitest": "^3.2.0"
   },
   "peerDependencies": {
     "openclaw": ">=2026.4.1"

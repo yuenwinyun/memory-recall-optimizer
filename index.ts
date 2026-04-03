@@ -1,3 +1,4 @@
+ï»¿import { definePluginEntry } from "./api.js";
 import type { OpenClawPluginApi } from "./api.js";
 
 const DEFAULTS = {
@@ -23,18 +24,18 @@ const MEMORY_KEYWORDS = [
   "earlier",
   "history",
   "i asked",
-  "ÉÏ´Î",
-  "Ö®Ç°",
-  "Ö®Ç°Ìáµ½",
-  "ÉÏ´ÎËµ",
-  "¼Ç×¡",
-  "»ØÏë",
-  "Ôø¾­",
-  "ÎÒÈÃÄã",
-  "Ö®Ç°µÄ",
+  "ä¸Šæ¬¡",
+  "ä¹‹å‰",
+  "ä¹‹å‰æåˆ°",
+  "ä¸Šæ¬¡è¯´",
+  "è®°ä½",
+  "å›æƒ³",
+  "æ›¾ç»",
+  "æˆ‘è®©ä½ ",
+  "ä¹‹å‰çš„",
 ];
 
-type PluginConfig = {
+export type PluginConfig = {
   enabled: boolean;
   enforceMemorySearchTuning: boolean;
   prePromptGuard: boolean;
@@ -44,17 +45,17 @@ type PluginConfig = {
   logMemorySearchSummary: boolean;
 };
 
-function isObject(value: unknown): value is Record<string, unknown> {
+export function isObject(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-function parseBoolean(value: unknown, fallback: boolean): boolean {
+export function parseBoolean(value: unknown, fallback: boolean): boolean {
   if (typeof value === "boolean") return value;
   if (typeof value === "string") return value === "1" || value.toLowerCase() === "true";
   return fallback;
 }
 
-function parseNumber(value: unknown, fallback: number): number {
+export function parseNumber(value: unknown, fallback: number): number {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string") {
     const parsed = Number(value);
@@ -63,7 +64,7 @@ function parseNumber(value: unknown, fallback: number): number {
   return fallback;
 }
 
-function readConfig(raw: unknown): PluginConfig {
+export function readConfig(raw: unknown): PluginConfig {
   const cfg = isObject(raw) ? raw : {};
   return {
     enabled: parseBoolean(cfg.enabled, DEFAULTS.enabled),
@@ -82,7 +83,7 @@ function readConfig(raw: unknown): PluginConfig {
   };
 }
 
-function toNumber(value: unknown): number | undefined {
+export function toNumber(value: unknown): number | undefined {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string") {
     const parsed = Number(value);
@@ -91,19 +92,19 @@ function toNumber(value: unknown): number | undefined {
   return undefined;
 }
 
-function shouldApplyMemoryGuard(prompt: string, cfg: PluginConfig): boolean {
+export function shouldApplyMemoryGuard(prompt: string, cfg: PluginConfig): boolean {
   const cleaned = prompt.trim().toLowerCase();
   if (cleaned.length < cfg.minPromptLengthForGuard) return false;
   return MEMORY_KEYWORDS.some((keyword) => cleaned.includes(keyword));
 }
 
-function countResults(result: unknown): number | undefined {
+export function countResults(result: unknown): number | undefined {
   if (!isObject(result)) return undefined;
   const raw = (result as { results?: unknown[] }).results;
   return Array.isArray(raw) ? raw.length : undefined;
 }
 
-function isDisabled(result: unknown): boolean {
+export function isDisabled(result: unknown): boolean {
   if (!isObject(result)) return false;
   return result.disabled === true;
 }
